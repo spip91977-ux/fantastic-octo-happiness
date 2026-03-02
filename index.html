@@ -1,0 +1,83 @@
+
+  <!-- DONE STATE -->
+  <div style="text-align:center;padding:48px 0;border-top:1px solid var(--border);margin-top:32px;">
+    <div style="font-size:48px;margin-bottom:16px">🎉</div>
+    <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--gold-l);margin-bottom:8px">KJ AI System — Fully Live</div>
+    <div style="font-size:14px;color:var(--muted);max-width:480px;margin:0 auto 24px">24/7 WhatsApp reception · Auto PDF quotes · M-Pesa payments · Google Sheets sync · Daily AI briefings · All 47 counties</div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:10px 20px;font-size:12px;color:var(--green)">✅ Phase 1–4 Deployed</div>
+      <div style="background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.2);border-radius:10px;padding:10px 20px;font-size:12px;color:var(--gold)">📊 Phase 5 → Client Portal</div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+  <button class="btn-sec" onclick="markAllDone()">✓ Mark All Done</button>
+  <div class="progress-overall"><div class="progress-overall-fill" id="overallProgress"></div></div>
+  <div class="progress-pct" id="progressPct">0%</div>
+  <button class="btn-primary" onclick="printGuide()">🖨 Print Guide</button>
+</div>
+
+<script>
+// ── ACCORDION ──
+function toggleStep(hdr){
+  const step=hdr.parentElement;
+  step.classList.toggle('open');
+}
+
+// ── CHECKLIST ──
+let totalChecks=0,doneChecks=0;
+function initChecks(){
+  totalChecks=document.querySelectorAll('.check-item').length;
+}
+function toggleCheck(el){
+  el.classList.toggle('checked');
+  doneChecks=document.querySelectorAll('.check-item.checked').length;
+  updateProgress();
+}
+function updateProgress(){
+  const pct=totalChecks?Math.round(doneChecks/totalChecks*100):0;
+  document.getElementById('overallProgress').style.width=pct+'%';
+  document.getElementById('progressPct').textContent=pct+'%';
+  document.getElementById('sbProgress').style.width=pct+'%';
+  document.getElementById('sbProgressLabel').textContent=`${doneChecks} of ${totalChecks} steps complete`;
+}
+function markAllDone(){
+  document.querySelectorAll('.check-item:not(.checked)').forEach(el=>el.click());
+}
+
+// ── COPY ──
+function copyEnv(id,btn){
+  const el=document.getElementById(id);
+  const text=el.innerText.replace(/📋 Copy All|📋 Copy/g,'').trim();
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='✅ Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='📋 Copy';btn.classList.remove('copied');},2500);
+  });
+}
+function copyBlock(btn){
+  const block=btn.parentElement;
+  const text=block.innerText.replace(/📋 Copy|bash|javascript/g,'').trim();
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='✅';
+    setTimeout(()=>btn.textContent='📋 Copy',2000);
+  });
+}
+
+// ── SCROLL ──
+function scrollTo(id){
+  const el=document.getElementById(id);
+  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── PRINT ──
+function printGuide(){window.print();}
+
+// ── INIT ──
+initChecks();
+updateProgress();
+</script>
+</body>
+</html>
